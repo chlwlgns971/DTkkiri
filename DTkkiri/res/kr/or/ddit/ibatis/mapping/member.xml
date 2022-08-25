@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="member">
+	<!-- 회원전체조회(관리자용) -->
+	<select id= "searchAllMember" resultClass="memberVO">
+       select * from member
+   	</select>
+   	<!-- 회원검색 -->
+	<select id= "searchAdminById" parameterClass="map" resultClass="memberVO">
+       select * from member where $option$ = #value#
+   	</select>
+   	<!-- 회원조회(관리자용) -->
+	<select id= "searchMemberById" parameterClass="String" resultClass="memberVO">
+       select * from member where mem_id=#mem_id#
+   	</select>
+   	<!-- 회원조회(관리자용) -->
+	<select id= "searchMemberByName" parameterClass="String" resultClass="memberVO">
+       select * from member where mem_name=#mem_name#
+   	</select>
+   	<!-- 아이디찾기 -->
+   	<select id= "findId" parameterClass="String" resultClass="String">
+       select mem_id from member where mem_mail=#mem_mail#
+   	</select>
+   	<!-- 비밀번호찾기 -->
+   	<select id= "findPassword" parameterClass="String" resultClass="String">
+       select mem_pass from member where mem_id=#mem_id#
+   	</select>
+   	<!-- 아이디 중복 검사 -->
+   	<select id= "checkById" parameterClass="String" resultClass="int">
+       select count(*) cnt from member where mem_id = #mem_id#
+   	</select>
+   	<!-- 이메일 중복 검사 -->
+   	<select id= "checkByMail" parameterClass="String" resultClass="int">
+       select count(*) cnt from member where mem_mail = #mem_mail#
+   	</select>
+   	
+   	<!-- 회원가입 -->
+   	<insert id= "signUp" parameterClass="memberVO">
+       insert into member (mem_id, mem_pass, mem_bir, mem_name, mem_war, mem_tname, mem_room, mem_mail, mem_pid, mem_gen, mem_dus) 
+       values(#mem_id#,#mem_pass#,#mem_bir#,#mem_name#,0,#mem_tname#,#mem_room#,#mem_mail#,'STUDENT',#mem_gen#, 'N')
+   	</insert>
+   	
+   	<!-- 회원탈퇴 -->
+   	<delete id= "deleteAccount" parameterClass="String">
+       delete from member where mem_id=#mem_id#
+   	</delete>
+   	
+   	<!-- 회원정보수정 -->
+   	<update id="updateMember" parameterClass="memberVO">
+		update member set mem_pass=#mem_pass#, mem_bir=#mem_bir#, mem_name=#mem_name#, mem_mail=#mem_mail# where mem_id=#mem_id#
+	</update>
+	<!-- 회원직급수정(관리자용) -->
+   	<update id="updatePid" parameterClass="Map">
+		update member set mem_pid=#mem_pid# where mem_id=#mem_id#
+	</update>
+	<!-- 회원경고횟수증가(관리자용) -->
+   	<update id="plusWarning" parameterClass="String">
+		update member set mem_war=mem_war+1 where mem_id=#mem_id#
+	</update>
+	<!-- 회원경고횟수감소(관리자용) -->
+   	<update id="minusWarning" parameterClass="String">
+		update member set mem_war=mem_war-1 where mem_id=#mem_id#
+	</update>
+	
+	<!-- 탈퇴한 회원의 탈퇴여부 확인 -->
+	<update id="updateDLTMember" parameterClass="String">
+		update member set mem_dus = 'Y' where mem_id = #mem_id#
+	</update>
+   	
+   	<!-- 서브관리자의 관리자페이지 (해당 방번호에 맞게 회원목록출력) -->
+	<select id="subAdminRoomList" parameterClass="int" resultClass="memberVO">
+		select * from member where mem_room = #mem_room#
+	</select>
+	
+	<!--  서브관리자의 관리자페이지 (검색옵션) -->
+	<select id="subAdminRoomlistSearch" parameterClass="map" resultClass="memberVO">
+		select * from member where $option$ = #value# and mem_room = #mem_room#
+	</select>
+</sqlMap>

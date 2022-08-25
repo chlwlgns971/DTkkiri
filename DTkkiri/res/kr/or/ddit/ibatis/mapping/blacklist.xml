@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="blacklist">
+
+	<!-- 메일계정을 이용한 블랙리스트 조회 -->	
+	<select id="searchBlacklist" parameterClass="String" resultClass="blacklistVO">
+		select * from blacklist where BKL_MAIL = #BKL_MAIL#
+	</select>
+	
+	<!-- 블랙리스트 재가입 방지를 위한 블랙리스트 조회 -->
+	<select id="searchBlacklistNum" parameterClass="String" resultClass="int">
+		select count(*) from blacklist where BKL_MAIL = #BKL_MAIL#
+	</select>
+	
+	<!-- 블랙리스트 전체 조회 -->
+	<select id="searchAllBlacklist" resultClass="blacklistVO">
+		select * from blacklist
+	</select>
+	
+	<!-- 블랙리스트 추가 -->
+	<insert id="insertBlacklist" parameterClass="blacklistVO">
+		insert into blacklist 
+		values(sysdate,  #bkl_rsn#, #bkl_mgr#, #bkl_mail#)
+	</insert>
+	
+	<!-- 블랙리스트 삭제 -->
+	<delete id="deleteBlacklist" parameterClass="String">
+		delete from blacklist
+		where bkl_mail = #bkl_mail#
+	</delete>
+	
+	
+	<!-- 서브관리자의 블랙리스트 조회 -->
+	<select id="subAdminsearchList" parameterClass="int" resultClass="blacklistVO">
+	select b.* from member a inner join blacklist b
+	on a.mem_mail = b.bkl_mail
+	where a.mem_room = #mem_room#
+	</select>
+
+</sqlMap>

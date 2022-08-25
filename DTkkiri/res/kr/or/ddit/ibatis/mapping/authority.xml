@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="aur">
+	<!-- 권한객체 가져오기 -->
+	<select id= "getAuthority" parameterClass="map" resultClass="authorityVO">
+       select * from authority where aur_bcode=#aur_bcode# and aur_pid=#aur_pid#
+   	</select>
+	
+</sqlMap>

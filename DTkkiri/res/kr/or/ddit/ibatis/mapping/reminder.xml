@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="reminder">
+
+	<!-- 리마인더 내용 추가 -->
+	<insert id="insertReminder" parameterClass="reminderVO">
+		insert into reminder 
+		values (#rmd_cont#, sysdate, rem_num_sq.nextval , #rmd_id#)
+	</insert>
+	
+	
+	<!-- 리마인더 내용 삭제 -->
+	<delete id="deleteReminder" parameterClass="int">
+		delete from reminder
+		where rmd_num = #rmd_num#
+	</delete>
+	
+	<!-- 리마인더 내용 불러오기 -->
+	<select id="selectReminder" parameterClass="String" resultClass="reminderVO">
+		select * from reminder where rmd_id = #rmd_id#
+	</select>
+	
+	<delete id="deleteUserReminder" parameterClass="String">
+		delete from reminder where rmd_id = #rmd_id#
+	</delete>
+</sqlMap>

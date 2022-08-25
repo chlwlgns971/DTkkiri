@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="file">
+	<!-- 테이블에 파일추가 -->
+	<insert id="insertFile" parameterClass="fileVO">
+		insert into atfile(atfile_sv_name, atfile_og_name, atfile_loc, atfile_size, atfile_pnum) 
+		values(#atfile_sv_name#,#atfile_og_name#,#atfile_loc#, #atfile_size#, #atfile_pnum#)  		
+	</insert>
+	
+	<!-- 파일 제목을 가지고 파일 정보 가져오기 -->
+	<select id="getFileinfo" parameterClass="String" resultClass="fileVO">
+		select* from atfile where atfile_sv_name=#atfile_sv_name#
+	</select>
+	
+	<!-- 게시글 번호를 가지고 파일 정보 가져오기 -->
+	<select id="getPostFileInfo" parameterClass="int" resultClass="fileVO">
+		select* from atfile where atfile_pnum=#atfile_pnum#
+	</select>
+	
+	<!-- 이미지파일 정보 가져오기 -->
+	<select id="getImageFileinfo" parameterClass="int" resultClass="fileVO">
+		select* from atfile where atfile_pnum=#atfile_pnum# and (atfile_og_name like '%' || 'jpg' or atfile_og_name like '%' || 'jpeg' or atfile_og_name like '%' || 'png')
+	</select>
+	
+	<!-- 파일삭제 -->
+	<delete id="deleteFile" parameterClass="int">
+		delete from atfile where atfile_pnum=#atfile_pnum#
+	</delete>
+</sqlMap>

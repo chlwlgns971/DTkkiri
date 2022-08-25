@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="restaurant">
+
+	<!-- 음식점 전체 조회 -->
+	<select id="searchAllRes" resultClass="restaurantVO" parameterClass="map">
+        select A.* from 
+		     (select rownum as rnum , B.* from
+		         ( select * from restaurant
+		            where rst_bcode=#rst_bcode#
+		            order by rst_rate desc ) B 
+	    <![CDATA[
+		      ) A
+		  where A.rnum <= #end# and A.rnum >= #start# 
+	 	]]>   
+	</select>
+	
+	<!-- 이름 검색을 통한 음식점 조회 -->
+	<select id="searchRes" parameterClass="String" resultClass="restaurantVO">
+		select * from restaurant where rst_name like '%' || #rst_name# || '%'
+	</select>
+	
+	<select id="searchNumRes" parameterClass="int" resultClass="restaurantVO">
+		select * from restaurant where rst_num = #rst_num#
+	</select>
+	
+	<!-- 음식점 추가 -->
+	<insert id="insertRes" parameterClass="restaurantVO">
+		insert into restaurant
+		values (#rst_name#, #rst_ph#, #rst_addr#, 0, RES_NUM_SQ.nextval, 'res', #rst_cont#) 
+	</insert>
+	
+	<!-- 음식점 삭제 -->
+	<delete id="deleteRes" parameterClass="int">
+		delete from restaurant where rst_num = #rst_num#
+	</delete>
+
+	<!-- 음식점 수정 -->
+	<update id="updateRes" parameterClass="restaurantVO">
+		update restaurant set rst_name = #rst_name#, rst_ph = #rst_ph#, rst_addr = #rst_addr#, rst_cont = #rst_cont#
+		where rst_num = #rst_num#
+	</update>
+	
+	<!-- 페이징 처리용 게시글 갯수 구하기 -->
+   	<select id= "postCount" parameterClass="String" resultClass="int">
+       select count(*) from restaurant where rst_bcode=#rst_bcode#
+   	</select>
+	
+	<!-- 평점 업데이트 -->
+	<update id="updateRate" parameterClass="restaurantVO">
+		update restaurant set rst_rate = #rst_rate# where rst_num = #rst_num#
+	</update>
+</sqlMap>
